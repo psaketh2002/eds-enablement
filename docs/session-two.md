@@ -134,11 +134,12 @@ always compare the real preview/published page before release.
    `psaketh2002/eds-enablement` and sign in with publishing permissions.
 3. Preview the page and metadata sheet. Verify
    https://main--eds-enablement--psaketh2002.aem.page/session-two.
-4. Push branch `session-two-redo` and inspect
-   https://session-two-redo--eds-enablement--psaketh2002.aem.page/session-two.
+4. Push branch `Session-two` and inspect
+   https://session-two--eds-enablement--psaketh2002.aem.page/session-two.
    If DA authoring is still blocked, the code-only fixture is available at
-   https://session-two-redo--eds-enablement--psaketh2002.aem.page/drafts/session-two.html;
+   https://session-two--eds-enablement--psaketh2002.aem.page/drafts/session-two.html;
    this does **not** substitute for checking authored content.
+   The GitHub branch uses an uppercase `S`; preview hostnames are lowercase.
 5. Open a PR to `main` and include the working preview URL, test results, and
    authoring/publication status. Confirm CI and Code Sync checks. Run PageSpeed
    Insights on the authored branch preview and target 100 before merging.
@@ -153,8 +154,8 @@ always compare the real preview/published page before release.
 
 The original implementation was merged in
 [PR #1](https://github.com/psaketh2002/eds-enablement/pull/1), then reverted from
-`main` and rebuilt on the fresh `session-two-redo` feature branch. See the
-[release pull requests](https://github.com/psaketh2002/eds-enablement/pulls?q=is%3Apr+head%3Asession-two-redo)
+`main` and rebuilt on the `Session-two` feature branch. See the
+[release pull requests](https://github.com/psaketh2002/eds-enablement/pulls?q=is%3Apr+head%3ASession-two)
 for the current review and merge status. The rebuilt runtime files preserve the
 verified implementation, including the image and font-loading improvements that
 produced hosted mobile and desktop PageSpeed scores of 100. Verify the fresh
