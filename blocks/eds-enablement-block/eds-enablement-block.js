@@ -11,18 +11,22 @@ export default function decorate(block) {
   });
 
   block.querySelectorAll('picture > img').forEach((image) => {
+    const authoredPicture = image.closest('picture');
+    const webpSource = authoredPicture.querySelector('source[type="image/webp"]:not([media])');
+    if (webpSource && webpSource.srcset.trim()) return;
+
     const picture = createOptimizedPicture(
       image.src,
       image.alt,
       image.loading === 'eager',
-      [{ media: '(min-width: 900px)', width: '1200' }, { width: '750' }],
+      [{ media: '(min-width: 900px)', width: '1200' }, { width: '600' }],
     );
     const optimizedImage = picture.querySelector('img');
-    ['width', 'height'].forEach((attribute) => {
+    ['width', 'height', 'fetchpriority'].forEach((attribute) => {
       if (image.hasAttribute(attribute)) {
         optimizedImage.setAttribute(attribute, image.getAttribute(attribute));
       }
     });
-    image.closest('picture').replaceWith(picture);
+    authoredPicture.replaceWith(picture);
   });
 }
