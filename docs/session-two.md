@@ -90,6 +90,8 @@ Validated locally with `aem up` and the repository's full `npm run lint`:
 - No DA preview module requested on normal visits; a mocked CDN module confirmed
   that `?dapreview=1` imports once and receives the `loadPage` function. This is
   an integration wiring test, not a claim that the authenticated DA editor was tested.
+- Existing home page still loads its seven cards and Columns block without
+  introducing a custom block or loading the DA preview module.
 
 ## DA Live Preview
 
@@ -127,6 +129,21 @@ always compare the real preview/published page before release.
    link. Capture a screenshot showing that URL and the new block. Do not label
    a localhost or branch screenshot as production evidence.
 
+## Delivery status
+
+The implementation is committed on the local `session-two` feature branch.
+Pushing to `psaketh2002/eds-enablement` was rejected because the available SSH
+identity, `saketh_adobe`, does not have write access. Both WSL and host Git
+reported the same permission error. No branch preview, PR, merge, or production
+deployment has therefore been verified.
+
+DA redirects to Adobe sign-in, so the page and bulk metadata have not been
+authored or published. The Chrome Web Store's **Add to Chrome** control is
+disabled in the integrated browser, so Sidekick is not installed there.
+The captured screenshot is of the local fixture, not production.
+Resume with repository write access, an authenticated DA session, and a
+supported Chrome profile using the steps above.
+
 ## Submission writeup
 
 I built a reusable EDS Enablement Block with responsive image-and-text rows for
@@ -138,8 +155,11 @@ page title, and a link to the DA Live Preview limitations.
 I also added the DA Live Preview integration and documented the bulk title
 `session-2 setup`, which must be overridden by the page title
 `session-2 setup first page`.
-One problem was that the available DA browser session required Adobe sign-in,
-so it could not create or publish the authored page.
-I addressed the development portion with a reproducible fixture and an exact
-authoring and publishing guide, while leaving authenticated publication clearly
-identified as a remaining step rather than claiming it was complete.
+One problem was that the default shell exposed Node.js 12 while the project's
+tooling targets Node.js 24.
+I resolved that by selecting the installed Node.js 24 runtime, restoring the
+dependencies, and validating the block with repository lint and desktop/mobile
+browser checks through the AEM development server.
+The work is committed locally, but GitHub write permissions, DA sign-in, and a
+supported Chrome profile are still needed to complete the PR, Sidekick
+publication, and production screenshot.
