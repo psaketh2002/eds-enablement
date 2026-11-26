@@ -1,9 +1,15 @@
-# Your Project's Title...
-Your project's description...
+# EDS Enablement
+
+A sandbox for authoring and publishing with Adobe Edge Delivery Services.
 
 ## Environments
-- Preview: https://main--{repo}--{owner}.aem.page/
-- Live: https://main--{repo}--{owner}.aem.live/
+- Preview: https://main--eds-enablement--psaketh2002.aem.page/
+- Live: https://main--eds-enablement--psaketh2002.aem.live/
+
+## Session two
+
+See the [session-two authoring and release guide](docs/session-two.md) for the
+custom EDS Enablement Block, metadata setup, Sidekick publishing steps, and writeup.
 
 ## Documentation
 
