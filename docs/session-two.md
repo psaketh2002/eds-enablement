@@ -6,7 +6,9 @@
 accepts rows of cells containing images or rich text, following the Block
 Collection's Columns content model. Cells stack on mobile and share the row at
 900px and above. Image-only cells receive responsive, optimized pictures;
-authored alt text and image dimensions are retained. Empty blocks, text-only
+authored alt text, image dimensions, and fetch priority are retained. Existing
+pictures with a default WebP source are preserved instead of replaced, retaining
+their responsive authoring and any in-flight image request. Empty blocks, text-only
 cells, multiple rows, and omitted images do not require special placeholder content.
 
 Use the block table heading **EDS Enablement Block (session-two, session-practice)**.
@@ -93,6 +95,24 @@ Validated locally with `aem up` and the repository's full `npm run lint`:
 - Existing home page still loads its seven cards and Columns block without
   introducing a custom block or loading the DA preview module.
 
+The fixture preconnects to the collection image origin, includes responsive WebP
+sources in its initial HTML, and marks its above-the-fold image `fetchpriority="high"`.
+Its sources match block decoration
+so the browser does not download a large PNG before discovering a second,
+optimized image through JavaScript. Images elsewhere remain lazy unless authored
+otherwise; the block does not promote every image to high priority.
+The fixture also loads its font stylesheet and preloads its two first-screen
+fonts in the head to avoid reflowing the heading and introduction after the
+optimized image has already painted. This is scoped to the fixture, not a change
+to the site's default font-loading policy.
+
+The original PR PageSpeed check reported mobile performance 84 and LCP 4.4s.
+A mobile Lighthouse reproduction scored 81 and showed an initial 493KB PNG
+download followed by a second, optimized image. After these changes, local
+Lighthouse measured mobile performance 99, LCP 2.3s, and CLS 0; desktop measured
+100. The mobile image transfer was approximately 35KB with high priority and no
+PNG download. Hosted CI remains the release gate because network timings vary.
+
 ## DA Live Preview
 
 The end of `scripts/scripts.js` loads DA's official preview integration only when
@@ -131,18 +151,18 @@ always compare the real preview/published page before release.
 
 ## Delivery status
 
-The implementation is committed on the local `session-two` feature branch.
-Pushing to `psaketh2002/eds-enablement` was rejected because the available SSH
-identity, `saketh_adobe`, does not have write access. Both WSL and host Git
-reported the same permission error. No branch preview, PR, merge, or production
-deployment has therefore been verified.
+The `session-two` branch is pushed and [PR #1](https://github.com/psaketh2002/eds-enablement/pull/1)
+is open. The branch fixture is verified. The initial SSH push failed because it
+authenticated as `saketh_adobe`; switching to HTTPS with personal-account
+authentication resolved access without deleting the corporate SSH key.
+The initial hosted PageSpeed failure is addressed by the image and font-loading
+changes described above; verify the latest PR check before merging.
 
-DA redirects to Adobe sign-in, so the page and bulk metadata have not been
-authored or published. The Chrome Web Store's **Add to Chrome** control is
-disabled in the integrated browser, so Sidekick is not installed there.
-The captured screenshot is of the local fixture, not production.
-Resume with repository write access, an authenticated DA session, and a
-supported Chrome profile using the steps above.
+DA page/bulk metadata authoring, Sidekick installation/publication, and a
+production release have not been verified by this implementation. The integrated
+browser initially required Adobe sign-in and disabled the Chrome Web Store's
+**Add to Chrome** control. Complete the authenticated steps above in a supported
+Chrome profile. The captured screenshot is of the local fixture, not production.
 
 ## Submission writeup
 
@@ -160,6 +180,5 @@ tooling targets Node.js 24.
 I resolved that by selecting the installed Node.js 24 runtime, restoring the
 dependencies, and validating the block with repository lint and desktop/mobile
 browser checks through the AEM development server.
-The work is committed locally, but GitHub write permissions, DA sign-in, and a
-supported Chrome profile are still needed to complete the PR, Sidekick
-publication, and production screenshot.
+The branch is pushed and a PR is open, while DA authoring, Sidekick publication,
+and the production screenshot remain to be verified.
